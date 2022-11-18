@@ -46,6 +46,7 @@ const validateSignup = [
 // ...
 
 // Sign up
+
 router.post(
   '/',
   validateSignup,
