@@ -1,4 +1,5 @@
 'use strict';
+let options  = {};
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
@@ -43,9 +44,9 @@ module.exports = {
         type: Sequelize.DATE,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       }
-    });
+    }, options);
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Reviews');
+    await queryInterface.dropTable('Reviews', options);
   }
 };
