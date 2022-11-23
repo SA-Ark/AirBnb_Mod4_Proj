@@ -44,8 +44,12 @@ module.exports = (sequelize, DataTypes) => {
       User.belongsToMany(models.Spot, {through: 'Booking',
       foreignKey: 'userId',
       otherKey: 'spotId'});
-      User.hasMany(models.Spot, {foreignKey: 'ownerId'});
-      User.hasMany(models.Review, {foreignKey: 'userId'})
+      User.hasMany(models.Spot, {foreignKey: 'ownerId',
+      onDelete: 'CASCADE',
+      hooks: true});
+      User.hasMany(models.Review, {foreignKey: 'userId',
+      onDelete: 'CASCADE',
+      hooks: true})
     }
   };
 
