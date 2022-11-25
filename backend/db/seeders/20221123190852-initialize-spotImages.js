@@ -1,25 +1,24 @@
 'use strict';
+const {Spot} = require('../models');
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
-    /**
-     * Add seed commands here.
-     *
-     * Example:
-     * await queryInterface.bulkInsert('People', [{
-     *   name: 'John Doe',
-     *   isBetaMember: false
-     * }], {});
-    */
+
+    const allSpotImages = [];
+    const allSpots = await Spot.findAll();
+    for (let spot of allSpots){
+      const spotImgObj = {};
+      spotImgObj.spotId = spot.id;
+      spotImgObj.url = 'www.google.com';
+      spotImgObj.preview = false;
+      allSpotImages.push(spotImgObj)
+    }
+    await queryInterface.bulkInsert('SpotImages', allSpotImages, {})
+
   },
 
   async down (queryInterface, Sequelize) {
-    /**
-     * Add commands to revert seed here.
-     *
-     * Example:
-     * await queryInterface.bulkDelete('People', null, {});
-     */
+    return queryInterface.bulkDelete('SpotImages', {}, {});
   }
 };

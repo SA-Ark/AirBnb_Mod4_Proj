@@ -27,13 +27,33 @@ module.exports = (sequelize, DataTypes) => {
     },
     startDate:{
       type: DataTypes.DATE,
-      allowNull: false
-    },
+      allowNull: false,
+      validate : {
+      minMaxYears(date){
+        console.log(date.slice(0,4))
+        if(+date.toString().split(' ')[3] > 2123 || +date.toString().split(' ')[3] < 2022)
+        {
+          throw new Error('Dates have to be within 100 years of curr date and not less than 2022')
+        }
+    }
+      }
+      },
+
     endDate: {
       type: DataTypes.DATE,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        minMaxYears(date){
+
+          if(+date.toString().split(' ')[3] > 2123 || +date.toString().split(' ')[3] < 2022)
+          {
+            throw new Error('Dates have to be within 100 years of curr date and not less than 2022')
+          }
+      }
     },
-  }, {
+  },
+},
+ {
     sequelize,
     modelName: 'Booking',
   });
