@@ -23,6 +23,17 @@ router.get('/current', requireAuth, async (req, res) => {
     return res.json(spotsOfCurrUser)
 })
 
+router.get('/:spotId/reviews', async (req, res)=>{
+    const spotReviews = await Spot.findByPk(req.params.spotId, {include:
+    [Review]})
+    if(!spotReviews){
+        throw new Error('CREATE ERROR HANDLERS')
+    }else{
+
+        return res.json(spotReviews.dataValues.Reviews)
+    }
+})
+
 router.get('/:spotId', async (req,res) => {
     const spot = await Spot.findByPk(req.params.spotId);
     if(spot){
@@ -43,17 +54,18 @@ router.post('/', requireAuth, async(req,res)=>{
     const randomSpot = await Spot.findOne()
 
     const keys = Object.keys(randomSpot.dataValues)
-    const newKeys= keys.filter(key => key !== 'id' && key !== 'createdAt' || key !== 'updatedAt');
-    const args = ['ownerId,']
+
+    const newKeys= keys.filter(key => key !== 'id' && key !== 'createdAt' && key !== 'updatedAt' && key !== 'ownerId');
+
 
     for( let key of newKeys){
+
         if(!req.body[key]){
             throw new Error('CREATE ERROR HANDLER')
         }
     }
     const ownerId = req.user.id
 
-    console.log({...args})
     const newSpot = await Spot.create({
         address, city, state, country, lat, lng, name, description, price, ownerId
 })
@@ -66,7 +78,7 @@ router.post('/:spotId/images', requireAuth, async (req, res)=> {
 
 
     const spotId = req.params.spotId;
-    console.log(spotId)
+
     const {url, preview} = req.body;
     const spotImage = await SpotImage.create({
         spotId, url, preview
