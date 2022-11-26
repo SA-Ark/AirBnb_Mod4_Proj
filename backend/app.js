@@ -6,6 +6,7 @@ const csurf = require('csurf');
 const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
 const { environment } = require('./config');
+const routes = require('./routes');
 
 const isProduction = environment === 'production';
 const app = express();
@@ -42,7 +43,6 @@ if (!isProduction) {
 
 
   // backend/app.js
-const routes = require('./routes');
 
 // ...
 

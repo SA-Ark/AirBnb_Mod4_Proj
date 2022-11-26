@@ -76,6 +76,7 @@ router.get(
   '/',
   restoreUser,
   (req, res) => {
+    
     const { user } = req;
     if (user) {
       return res.json({
