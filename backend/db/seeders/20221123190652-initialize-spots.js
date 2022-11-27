@@ -1,6 +1,10 @@
 'use strict';
 const {User} = require('../models')
-
+let options = {};
+if (process.env.NODE_ENV === 'production') {
+  options.schema = process.env.SCHEMA;  // define your schema in options object
+}
+options.tableName = 'Spots';
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
@@ -25,12 +29,12 @@ module.exports = {
       spotObj.price =  `${100 + i}`
       allSpots.push(spotObj)
     }
-    await queryInterface.bulkInsert('Spots', allSpots, {});
+    await queryInterface.bulkInsert(options, allSpots, {});
   },
 
   async down(queryInterface, Sequelize) {
 
     const Op = Sequelize.Op;
-    return queryInterface.bulkDelete('Spots', {}, {});
+    return queryInterface.bulkDelete(options, {}, {});
   }
 };

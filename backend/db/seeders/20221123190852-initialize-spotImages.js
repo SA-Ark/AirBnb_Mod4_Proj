@@ -1,5 +1,10 @@
 'use strict';
 const {Spot} = require('../models');
+let options = {};
+if (process.env.NODE_ENV === 'production') {
+  options.schema = process.env.SCHEMA;  // define your schema in options object
+}
+options.tableName = 'SpotImages';
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
@@ -14,11 +19,11 @@ module.exports = {
       spotImgObj.preview = false;
       allSpotImages.push(spotImgObj)
     }
-    await queryInterface.bulkInsert('SpotImages', allSpotImages, {})
+    await queryInterface.bulkInsert(options, allSpotImages, {})
 
   },
 
   async down (queryInterface, Sequelize) {
-    return queryInterface.bulkDelete('SpotImages', {}, {});
+    return queryInterface.bulkDelete(options, {}, {});
   }
 };
