@@ -16,6 +16,11 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Booking.init({
+    id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+      },
     spotId: {
       type: DataTypes.INTEGER,
       allowNull: false
@@ -30,7 +35,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate : {
       minMaxYears(date){
-        console.log(date.slice(0,4))
+
         if(+date.toString().split(' ')[3] > 2123 || +date.toString().split(' ')[3] < 2022)
         {
           throw new Error('Dates have to be within 100 years of curr date and not less than 2022')
