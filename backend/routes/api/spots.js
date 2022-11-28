@@ -158,12 +158,18 @@ router.post('/:spotId/images', requireAuth, async (req, res) => {
 
 
     const spotId = req.params.spotId;
+    const thisSpot = await Spot.findByPk(spotId)
+    if(!thisSpot){
+        throw new Error('CREATE ERROR HANDLERS')
+    }else{
 
-    const { url, preview } = req.body;
-    const spotImage = await SpotImage.create({
-        spotId, url, preview
-    })
-    return res.json(spotImage)
+        const { url, preview } = req.body;
+        const spotImage = await SpotImage.create({
+            spotId, url, preview
+        })
+        return res.json(spotImage)
+    }
+
 })
 
 
