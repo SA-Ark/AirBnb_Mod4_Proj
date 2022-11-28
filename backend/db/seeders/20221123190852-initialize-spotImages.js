@@ -19,13 +19,13 @@ module.exports = {
       spotImgObj.preview = false;
       allSpotImages.push(spotImgObj)
     }
-    
+
     // const allSpotImagesNew = [{
     //   spotId: 1,
     //   url: 'www.google.com',
     //   preview : false
     // }]
-    await queryInterface.bulkInsert(options, allSpotImagesNew)
+    await queryInterface.bulkInsert(options, allSpotImages)
 
   },
 

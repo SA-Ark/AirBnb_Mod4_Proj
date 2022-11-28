@@ -53,13 +53,16 @@ router.post(
   async (req, res) => {
     const { email, password, username, firstName, lastName } = req.body;
     const user = await User.signup({ email, username, password, firstName, lastName });
-    const newUser = user.toJSON()
-    await setTokenCookie(res, newUser);
+    const token = setTokenCookie(res, user);
+    userPOJO = user.toJSON()
+    userPOJO.token = token
+    delete userPOJO.createdAt;
+    delete userPOJO.updatedAt
 
-    return res.json({
+    return res.json(
       // user: user,
-      newUser
-    });
+      userPOJO
+    );
   }
 );
 

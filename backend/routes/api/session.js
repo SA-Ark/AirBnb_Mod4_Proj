@@ -105,12 +105,17 @@ router.post(
       err.errors = ['The provided credentials were invalid.'];
       return next(err);
     }
+    const userPOJO = user.toJSON();
 
-    await setTokenCookie(res, user);
+     userPOJO.token = setTokenCookie(res, user);
 
-    return res.json({
-      user: user
-    });
+    delete userPOJO.createdAt;
+    delete userPOJO.updatedAt;
+
+
+    return res.json(
+      userPOJO
+    );
   }
 );
 
