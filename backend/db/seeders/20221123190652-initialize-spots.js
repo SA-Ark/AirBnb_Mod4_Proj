@@ -30,18 +30,21 @@ module.exports = {
   //     allSpots.push(spotObj)
   //   }
   //   await queryInterface.bulkInsert(options, allSpots);
-    await queryInterface.bulkInsert(options, [{
-      ownerId : 1,
-      address : `random street in rando town`,
-      city : `LA ` ,
-      state : `CA `,
-      country : `USA `,
-      lat : 33.5  ,
-      lng :  99.9,
-      name : `Epic Pad`,
-      description : `This house is awesome`,
-      price :  100
-    }]);
+
+
+  const allSpotsNew = [{
+    ownerId : 1,
+    address : `random street in rando town`,
+    city : `LA ` ,
+    state : `CA `,
+    country : `USA `,
+    lat : 33.5  ,
+    lng :  99.9,
+    name : `Epic Pad`,
+    description : `This house is awesome`,
+    price :  120
+  }]
+    await queryInterface.bulkInsert(options, allSpotsNew);
   },
 
   async down(queryInterface, Sequelize) {
