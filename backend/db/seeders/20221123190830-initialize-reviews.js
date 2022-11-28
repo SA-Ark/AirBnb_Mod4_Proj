@@ -18,7 +18,7 @@ module.exports = {
       })
     for (let spot of allSpots){
       let reviewObj = {};
-      
+
       const spotUserId = spot.dataValues.ownerId
       reviewObj.spotId = spot.id ;
       reviewObj.userId = spotUserId;
@@ -31,10 +31,10 @@ module.exports = {
       allReviews.push(reviewObj)
     }
 
-     await queryInterface.bulkInsert(options, allReviews, {});
+     await queryInterface.bulkInsert(options, allReviews);
   },
 
   async down (queryInterface, Sequelize) {
-    return queryInterface.bulkDelete(options, {}, {});
+    return queryInterface.bulkDelete(options, {});
   }
 };

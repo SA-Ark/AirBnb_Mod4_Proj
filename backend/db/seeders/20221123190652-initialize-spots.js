@@ -29,12 +29,12 @@ module.exports = {
       spotObj.price =  `${100 + i}`
       allSpots.push(spotObj)
     }
-    await queryInterface.bulkInsert(options, allSpots, {});
+    await queryInterface.bulkInsert(options, allSpots);
   },
 
   async down(queryInterface, Sequelize) {
 
     const Op = Sequelize.Op;
-    return queryInterface.bulkDelete(options, {}, {});
+    return queryInterface.bulkDelete(options, {});
   }
 };

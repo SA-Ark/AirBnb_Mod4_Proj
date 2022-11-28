@@ -21,10 +21,10 @@ module.exports = {
     }
 
 
-    await queryInterface.bulkInsert(options, allReviewImages, {})
+    await queryInterface.bulkInsert(options, allReviewImages)
   },
 
   async down (queryInterface, Sequelize) {
-    return queryInterface.bulkDelete(options, {}, {});
+    return queryInterface.bulkDelete(options, {});
   }
 };

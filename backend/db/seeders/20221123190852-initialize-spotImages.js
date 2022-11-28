@@ -19,11 +19,11 @@ module.exports = {
       spotImgObj.preview = false;
       allSpotImages.push(spotImgObj)
     }
-    await queryInterface.bulkInsert(options, allSpotImages, {})
+    await queryInterface.bulkInsert(options, allSpotImages)
 
   },
 
   async down (queryInterface, Sequelize) {
-    return queryInterface.bulkDelete(options, {}, {});
+    return queryInterface.bulkDelete(options, {});
   }
 };

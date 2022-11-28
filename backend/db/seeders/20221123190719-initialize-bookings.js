@@ -19,7 +19,7 @@ module.exports = {
       include: {
         model: Spot
       }    });
-   
+
     for (let user of allUsers) {
       let userSpotId = user.dataValues.Spots[0].dataValues.id
       let bookingObj = {
@@ -33,12 +33,12 @@ module.exports = {
 
 
 
-    await queryInterface.bulkInsert(options, allBookings, {});
+    await queryInterface.bulkInsert(options, allBookings);
   },
 
   async down(queryInterface, Sequelize) {
 
     const Op = Sequelize.Op;
-    return queryInterface.bulkDelete(options, {}, {});
+    return queryInterface.bulkDelete(options, {});
   }
 };
