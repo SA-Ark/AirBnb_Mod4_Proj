@@ -18,7 +18,8 @@ module.exports = {
       })
     for (let spot of allSpots){
       let reviewObj = {};
-      const spotUserId = spot.dataValues.Users[0].dataValues.id
+      
+      const spotUserId = spot.dataValues.ownerId
       reviewObj.spotId = spot.id ;
       reviewObj.userId = spotUserId;
       reviewObj.review = `Great place to stay and chill #${spot.id}`;
@@ -29,7 +30,7 @@ module.exports = {
       }
       allReviews.push(reviewObj)
     }
-  
+
      await queryInterface.bulkInsert(options, allReviews, {});
   },
 

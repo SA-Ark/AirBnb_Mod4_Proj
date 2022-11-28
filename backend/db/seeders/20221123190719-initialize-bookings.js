@@ -1,6 +1,6 @@
 'use strict';
 
-const { User, Spot } = require('../models')
+const { User, Spot, Review } = require('../models')
 let options = {};
 if (process.env.NODE_ENV === 'production') {
   options.schema = process.env.SCHEMA;  // define your schema in options object
@@ -10,12 +10,16 @@ options.tableName = 'Bookings';
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
+    console.log('hi')
 
     const allBookings = [];
+
+
     const allUsers = await User.findAll({
-      include:
-        [Spot]
-    });
+      include: {
+        model: Spot
+      }    });
+   
     for (let user of allUsers) {
       let userSpotId = user.dataValues.Spots[0].dataValues.id
       let bookingObj = {

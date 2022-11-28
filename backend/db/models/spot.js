@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Spot.belongsToMany(models.User, {through: 'Booking'});
+      Spot.belongsTo(models.User, {foreignKey: 'ownerId'});
       Spot.hasMany(models.Review, {foreignKey: 'spotId',
       onDelete: 'CASCADE',
       hooks: true})
@@ -21,7 +21,11 @@ module.exports = (sequelize, DataTypes) => {
     ownerId: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      onDelete: 'CASCADE',
+      references: {
+        model: 'Users',
+        key: 'id'
+      },
+      onDelete: 'SET NULL',
       validate: {
         isNumeric: true
       }
@@ -46,7 +50,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-       
+
         len: [2, Infinity]
       }
     },
