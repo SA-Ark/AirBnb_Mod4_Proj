@@ -41,15 +41,9 @@ router.put('/:reviewId', requireAuth, async (req, res) => {
     } else {
 
         const { review, stars } = req.body
-        const args = []
-        if (review) {
-            args.push(review + ',')
-        }
-        if (stars) {
-            args.push(stars + ',')
-        }
+
         await thisReview.update({
-            ...args
+           review, stars
         })
         return res.json(thisReview)
     }

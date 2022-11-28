@@ -222,8 +222,7 @@ router.put('/:spotId', requireAuth, async (req, res) => {
     } else {
 
         const updatedSpot = await origSpot.update({
-            // address, city, state, country, lat, lng, name, description, price
-            ...keys
+            address, city, state, country, lat, lng, name, description, price
         })
         return res.json(updatedSpot)
     }
