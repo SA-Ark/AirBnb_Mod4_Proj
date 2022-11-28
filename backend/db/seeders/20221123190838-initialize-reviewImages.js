@@ -11,20 +11,22 @@ options.tableName = 'ReviewImages';
 module.exports = {
   async up (queryInterface, Sequelize) {
 
-    // const allReviewImages = [];
-    // const allReviews = await Review.findAll();
-    // for (let review of allReviews){
-    //   const reviewImgObj = {};
-    //   reviewImgObj.reviewId = review.id;
-    //   reviewImgObj.url = 'www.google.com';
-    //   allReviewImages.push(reviewImgObj)
-    // }
-    const allReviewImagesNew = [{
-      reviewId : 1,
-      url: 'www.google.com'
-    }]
+    const allReviewImages = [];
+    const allReviews = await Review.findAll();
+    for (let review of allReviews){
+      const reviewImgObj = {};
+      reviewImgObj.reviewId = review.id;
+      reviewImgObj.url = 'www.google.com';
+      allReviewImages.push(reviewImgObj)
+    }
 
-    await queryInterface.bulkInsert(options, allReviewImagesNew)
+
+    // const allReviewImagesNew = [{
+    //   reviewId : 1,
+    //   url: 'www.google.com'
+    // }]
+
+    await queryInterface.bulkInsert(options, allReviewImages)
   },
 
   async down (queryInterface, Sequelize) {

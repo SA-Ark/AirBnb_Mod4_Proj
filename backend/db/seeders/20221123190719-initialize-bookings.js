@@ -1,6 +1,6 @@
 'use strict';
 
-const { User, Spot, Review } = require('../models')
+const { User, Spot } = require('../models')
 let options = {};
 if (process.env.NODE_ENV === 'production') {
   options.schema = process.env.SCHEMA;  // define your schema in options object
@@ -12,36 +12,36 @@ module.exports = {
   async up(queryInterface, Sequelize) {
 
 
-    // const allBookings = [];
+    const allBookings = [];
 
 
-    // const allUsers = await User.findAll({
-    //   include: {
-    //     model: Spot
-    //   }    });
+    const allUsers = await User.findAll({
+      include: {
+        model: Spot
+      }    });
 
-    // for (let user of allUsers) {
-    //   let userSpotId = user.dataValues.Spots[0].dataValues.id
-    //   let bookingObj = {
-    //     startDate: new Date('August 19, 2023 23:15:30'),
-    //     endDate: new Date('August 21, 2023 23:15:30'),
-    //     userId: user.id,
-    //     spotId: userSpotId
-    //   };
-    //   allBookings.push(bookingObj)
-    // }
-
-    const allBookingsNew = [{
-      startDate: new Date('August 19, 2023 23:15:30'),
-      endDate: new Date('August 21, 2023 23:15:30'),
-      userId: 1,
-      spotId: 1
+    for (let user of allUsers) {
+      let userSpotId = user.dataValues.Spots[0].dataValues.id
+      let bookingObj = {
+        startDate: new Date('August 19, 2023 23:15:30'),
+        endDate: new Date('August 21, 2023 23:15:30'),
+        userId: user.id,
+        spotId: userSpotId
+      };
+      allBookings.push(bookingObj)
     }
-    ]
+
+    // const allBookingsNew = [{
+    //   startDate: new Date('August 19, 2023 23:15:30'),
+    //   endDate: new Date('August 21, 2023 23:15:30'),
+    //   userId: 1,
+    //   spotId: 1
+    // }
+    // ]
 
 
 
-    await queryInterface.bulkInsert(options, allBookingsNew);
+    await queryInterface.bulkInsert(options, allBookings);
   },
 
   async down(queryInterface, Sequelize) {

@@ -10,20 +10,21 @@ options.tableName = 'SpotImages';
 module.exports = {
   async up (queryInterface, Sequelize) {
 
-    // const allSpotImages = [];
-    // const allSpots = await Spot.findAll();
-    // for (let spot of allSpots){
-    //   const spotImgObj = {};
-    //   spotImgObj.spotId = spot.id;
-    //   spotImgObj.url = 'www.google.com';
-    //   spotImgObj.preview = false;
-    //   allSpotImages.push(spotImgObj)
-    // }
-    const allSpotImagesNew = [{
-      spotId: 1,
-      url: 'www.google.com',
-      preview : false
-    }]
+    const allSpotImages = [];
+    const allSpots = await Spot.findAll();
+    for (let spot of allSpots){
+      const spotImgObj = {};
+      spotImgObj.spotId = spot.id;
+      spotImgObj.url = 'www.google.com';
+      spotImgObj.preview = false;
+      allSpotImages.push(spotImgObj)
+    }
+    
+    // const allSpotImagesNew = [{
+    //   spotId: 1,
+    //   url: 'www.google.com',
+    //   preview : false
+    // }]
     await queryInterface.bulkInsert(options, allSpotImagesNew)
 
   },
