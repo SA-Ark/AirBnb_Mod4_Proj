@@ -45,6 +45,7 @@ module.exports = {
   //   price :  120
   // }]
   //   await queryInterface.bulkInsert(options, allSpotsNew);
+  //remigrate
   },
 
   async down(queryInterface, Sequelize) {
