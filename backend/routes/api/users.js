@@ -64,7 +64,9 @@ router.post(
     })
     if(userEmail){
       const err = new Error();
-      err.errors.email = "User with that email already exists"
+      err.errors =  {
+        "email": "User with that email already exists"
+      }
       err.status = 403;
       err.title = 'Sign Up Failure';
       err.message = "User already exists";
@@ -75,7 +77,9 @@ router.post(
     }
     if(userUsername){
       const err = new Error();
-      err.errors.username = "User with that username already exists"
+      err.errors = {
+        "username": "User with that username already exists"
+      }
       err.status = 403;
       err.title = 'Sign Up Failure';
       err.message = "User already exists";

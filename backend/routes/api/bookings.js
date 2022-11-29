@@ -1,6 +1,6 @@
 const express = require('express');
 const {requireAuth} = require('../../utils/auth');
-const {User, Booking, Spot} = require('../../db/models')
+const {User, Booking, Spot, SpotImage} = require('../../db/models')
 const router = express.Router();
 
 //get all bookings of current user
@@ -12,10 +12,16 @@ router.get('/current', requireAuth, async(req,res)=>{
 const Bookings = [];
 for (let booking of allBookings){
 
-    const spot = await Spot.findByPk(booking.spotId)
+    let spot = await Spot.findByPk(booking.spotId)
+    let spotPOJO = spot.toJSON()
     let bookingPOJO = booking.toJSON();
-    console.log(bookingPOJO)
-    bookingPOJO.Spot = spot;
+    let spotImage = await SpotImage.findByPk(spot.id)
+    if(!spotImage){
+        spotPOJO.previewImage = "No preview image available for this spot"
+    }else{
+        spotPOJO.previewImage = spotImage.url
+    }
+    bookingPOJO.Spot = spotPOJO;
     Bookings.push(bookingPOJO)
 }
 

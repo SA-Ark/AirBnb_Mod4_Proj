@@ -41,16 +41,53 @@ router.get('/', async (req, res, next) => {
         return next(err)
     }
 
-    const Spots = await Spot.findAll({
+    const allSpots = await Spot.findAll({
         limit: size,
         offset: size * (page - 1)
     });
+    const Spots = []
+    for(let spot of allSpots){
+        let spotEdited = spot.toJSON();
+        let starSum = 0;
+
+        let reviews = await Review.findAll({where:{
+            spotId: spot.id
+        }})
+        let spotImage = await SpotImage.findOne({where:{
+            spotId: spot.id,
+            preview: true
+        }})
+
+    if(!reviews.length){
+        spotEdited.avgRating= 'No ratings on this spot yet';
+
+    }else{
+        for (let review of reviews){
+            starSum += review.stars
+            }
+            spotEdited.avgRating = starSum/reviews.length;
+        }
+    if(!spotImage){
+        spotEdited.previewImage= 'No preview images for this spot yet';
+    }else{
+
+            spotEdited.previewImage = spotImage.url;
+        }
+        Spots.push(spotEdited)
+    }
 
 
-    const allSpotsPOJO = { Spots }
-    allSpotsPOJO.page = page;
-    allSpotsPOJO.size = size
-    return res.json(allSpotsPOJO)
+    // const allSpotsPOJO = { Spots }
+    // allSpotsPOJO.page = page;
+    // allSpotsPOJO.size = size
+    // return res.json(allSpotsPOJO)
+
+
+    Spots.page = page;
+    Spots.size = size
+    return res.json({Spots})
+
+
 })
 
 //get all spots of curr user
@@ -223,7 +260,7 @@ router.get('/:spotId', async (req, res, next) => {
                 }
             }
 
-            spotEdited.avgRating = starSum/reviews.length;
+            spotEdited.avgStarRating = starSum/reviews.length;
             spotEdited.numReviews = reviews.length
             spotEdited.SpotImages = previewImages;
             spotEdited.Owner = spotEdited.User;
@@ -388,6 +425,7 @@ router.post('/:spotId/images', requireAuth, async (req, res, next) => {
         const spotImagePOJO = spotImage.toJSON();
        delete spotImagePOJO.updatedAt;
        delete spotImagePOJO.createdAt;
+       delete spotImagePOJO.spotId
         return res.json(spotImagePOJO)
     }
 

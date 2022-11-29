@@ -1,11 +1,36 @@
 const express = require('express');
 const router = express.Router();
 const { requireAuth } = require('../../utils/auth.js')
-const { ReviewImage, Review, Spot, User } = require('../../db/models')
+const { ReviewImage, Review, Spot, User, SpotImage } = require('../../db/models')
 
 
 // get all reviews that the logged in user has made
 router.get('/current', requireAuth, async (req, res) => {
+    // const ReviewsArr = await Review.findAll({
+    //     where: {
+
+    //         userId: req.user.id
+    //     },
+    //     include: [User, Spot, ReviewImage]
+    // })
+    // const Reviews = [];
+    // for(let review of ReviewsArr){
+    //     reviewPOJO = review.toJSON();
+    //     delete reviewPOJO.User.username;
+    //     delete reviewPOJO.Spot.createdAt;
+    //     delete reviewPOJO.Spot.updatedAt;
+
+    //     for (let i = 0; i < reviewPOJO.ReviewImages.length; i++){
+    //         delete reviewPOJO.ReviewImages[i].reviewId
+    //         delete reviewPOJO.ReviewImages[i].createdAt
+    //         delete reviewPOJO.ReviewImages[i].updatedAt
+    //      }
+    // Reviews.push(reviewPOJO)
+
+    // }
+
+    // return res.json({Reviews});
+    const Reviews = []
     const ReviewsArr = await Review.findAll({
         where: {
 
@@ -13,21 +38,52 @@ router.get('/current', requireAuth, async (req, res) => {
         },
         include: [User, Spot, ReviewImage]
     })
-    const Reviews = [];
     for(let review of ReviewsArr){
-        reviewPOJO = review.toJSON();
-        delete reviewPOJO.User.username;
-        delete reviewPOJO.Spot.createdAt;
+         reviewPOJO = review.toJSON();
+         delete reviewPOJO.User.username;
+       delete reviewPOJO.Spot.createdAt;
         delete reviewPOJO.Spot.updatedAt;
-
-        for (let i = 0; i < reviewPOJO.ReviewImages.length; i++){
-            delete reviewPOJO.ReviewImages[i].reviewId
-            delete reviewPOJO.ReviewImages[i].createdAt
-            delete reviewPOJO.ReviewImages[i].updatedAt
+         let previewImage = await SpotImage.findByPk(reviewPOJO.Spot.id, {
+            where: {
+                preview: true
+            }
+         })
+         if(!previewImage){
+            reviewPOJO.Spot.previewImage = 'There is not yet a preview image for this spot'
+         }else{
+            let previewImagePOJO = previewImage.toJSON()
+            reviewPOJO.Spot.previewImage = previewImagePOJO.url
          }
-    Reviews.push(reviewPOJO)
-
+         for (let i = 0; i < reviewPOJO.ReviewImages.length; i++){
+                    delete reviewPOJO.ReviewImages[i].reviewId
+                    delete reviewPOJO.ReviewImages[i].createdAt
+                    delete reviewPOJO.ReviewImages[i].updatedAt
+                 }
+        Reviews.push(reviewPOJO)
+         console.log(reviewPOJO)
     }
+
+    // const allSpots = aait Spot.findAll({
+    //     where: {
+    //         spotId:
+    //     }
+    // })
+    // const Reviews = [];
+    // for(let review of ReviewsArr){
+    //     reviewPOJO = review.toJSON();
+    //     delete reviewPOJO.User.username;
+    //     delete reviewPOJO.Spot.createdAt;
+    //     delete reviewPOJO.Spot.updatedAt;
+
+    //     for (let i = 0; i < reviewPOJO.ReviewImages.length; i++){
+    //         delete reviewPOJO.ReviewImages[i].reviewId
+    //         delete reviewPOJO.ReviewImages[i].createdAt
+    //         delete reviewPOJO.ReviewImages[i].updatedAt
+    //      }
+    // Reviews.push(reviewPOJO)
+
+    // }
+
     return res.json({Reviews});
 })
 
