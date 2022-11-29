@@ -31,6 +31,11 @@ router.post('/test', (req, res) => {
   res.json({ requestBody: req.body });
 });
 
+router.get('/test', (req, res) => {
+  res.json('YAYA ITS WORKING');
+});
+
+
 
 /// backend/routes/api/index.js
 // ...

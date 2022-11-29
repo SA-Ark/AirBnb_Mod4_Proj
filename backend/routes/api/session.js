@@ -79,9 +79,10 @@ router.get(
 
     const { user } = req;
     if (user) {
-      return res.json({
-        user: user.toSafeObject()
-      });
+      const thisUser = user.toSafeObject()
+      return res.json(
+      thisUser
+      );
     } else return res.json({ user: null });
   }
 );
@@ -99,8 +100,9 @@ router.post(
     const user = await User.login({ credential, password });
 
     if (!user) {
-      const err = new Error('Login failed');
+      const err = new Error();
       err.status = 401;
+      err.message = "Invalid credentials"
       err.title = 'Login failed';
       err.errors = ['The provided credentials were invalid.'];
       return next(err);
@@ -118,6 +120,7 @@ router.post(
     );
   }
 );
+
 
 
 module.exports = router;
