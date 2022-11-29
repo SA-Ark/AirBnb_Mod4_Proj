@@ -29,6 +29,19 @@ router.put('/:bookingId', requireAuth, async (req,res, next)=>{
     const bookingToEdit = await Booking.findByPk(req.params.bookingId);
     const {startDate, endDate} = req.body;
 
+    const startDateDate = new Date(startDate)
+     const endDateDate = new Date(endDate)
+    if(startDateDate.getTime()>endDateDate.getTime()){
+        const err = new Error();
+        err.errors =  {
+            "endDate": "endDate cannot come before startDate"}
+        err.status = 400;
+        err.title = "Dates Don't Make Sense";
+        err.message = "Validation error";
+
+        return next(err)
+    }
+
     if(!bookingToEdit){
         const err = new Error();
             err.errors = "Booking does not exist"
@@ -38,7 +51,16 @@ router.put('/:bookingId', requireAuth, async (req,res, next)=>{
 
             return next(err)
     }
-    console.log(bookingToEdit.dataValues.id)
+        const bookingEndDate = new Date(bookingToEdit.endDate)
+
+    if(bookingEndDate.getTime()< startDateDate.getTime()){
+        const err = new Error();
+        err.errors =  "Cannot edit past bookings"
+        err.status = 403;
+        err.title = "Booking has expired";
+        err.message = "Past bookings can't be modified";
+
+    }
 
 
     const possibleDupeBookings = await Booking.findAll({
@@ -94,6 +116,15 @@ router.delete('/:bookingId', requireAuth, async(req, res, next)=>{
 
         return next(err)
     }else{
+        if(deleteBooking.startDate.getTime()< Date.now()){
+            const err = new Error();
+            err.errors = "Cannot edit a booking that has started"
+            err.status = 403;
+            err.title = 'Booking has already started';
+            err.message = "Bookings that have been started can't be deleted";
+
+            return next(err)
+        }
         await deleteBooking.destroy()
         res.json({"message": "Successfully deleted",
         "statusCode": 200})
