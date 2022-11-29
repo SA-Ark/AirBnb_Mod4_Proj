@@ -1,6 +1,6 @@
 const express = require('express');
 
-const { Spot, SpotImage, Review, Booking, User } = require('../../db/models');
+const { Spot, SpotImage, Review, Booking, User, ReviewImage } = require('../../db/models');
 
 const { requireAuth } = require('../../utils/auth.js')
 // const {handleValidationErrors} = require('../../utils/validation')
@@ -21,6 +21,24 @@ router.get('/', async (req, res, next) => {
     }
     if (Number.isNaN(size)) {
         size = 1
+    }
+    if(page < 1 || size < 1){
+        const err = new Error();
+        err.errors =  {
+            "page": "Page must be greater than or equal to 1",
+            "size": "Size must be greater than or equal to 1",
+            "maxLat": "Maximum latitude is invalid",
+            "minLat": "Minimum latitude is invalid",
+            "minLng": "Maximum longitude is invalid",
+            "maxLng": "Minimum longitude is invalid",
+            "minPrice": "Maximum price must be greater than or equal to 0",
+            "maxPrice": "Minimum price must be greater than or equal to 0"
+          }
+        err.status = 400;
+        err.title = 'Incorrect Inputs';
+        err.message = "Validation Error";
+
+        return next(err)
     }
 
     const Spots = await Spot.findAll({
@@ -83,34 +101,90 @@ router.get('/current', requireAuth, async (req, res, next) => {
 )
 
 //get all bookings for a spot by spotId
-router.get('/:spotId/bookings', async (req, res, next) => {
+router.get('/:spotId/bookings', requireAuth, async (req, res, next) => {
     const thisSpot = await Spot.findByPk(req.params.spotId);
 
     if (!thisSpot) {
-        throw new Error('CREATE ERROR HANDLERS')
+        const err = new Error();
+            err.errors = "Spot does not exist"
+            err.status = 404;
+            err.title = 'The spot for this alleged booking does not exist';
+            err.message = "Spot couldn't be found";
+
+            return next(err)
     } else {
 
-        const spotBookings = await Booking.findAll({
+        const allBookings = await Booking.findAll({
             where: {
                 spotId: req.params.spotId
             }
         })
-        return res.json(spotBookings)
+ const  user = await User.findByPk(req.user.id);
+const userPOJO = user.toJSON();
+
+delete userPOJO.username;
+
+const Bookings = []
+
+
+if(allBookings.length && user){
+    for (let booking of allBookings){
+        let bookingPOJO = booking.toJSON();
+        bookingPOJO.User= userPOJO
+        Bookings.push(bookingPOJO)
+    }
+
+}
+        return res.json({Bookings})
     }
 })
 
 
 //get all reviews of spot by spotId
 router.get('/:spotId/reviews', async (req, res, next) => {
-    const spotReviews = await Spot.findByPk(req.params.spotId, {
+    const spot = await Spot.findByPk(req.params.spotId, {
         include:
             [Review]
     })
-    if (!spotReviews) {
-        throw new Error('CREATE ERROR HANDLERS')
-    } else {
+    if (!spot) {
+        const err = new Error();
+        err.errors = "Spot does not exist"
+        err.status = 404;
+        err.title = 'No Spot Found';
+        err.message = "Spot couldn't be found";
 
-        return res.json(spotReviews.dataValues.Reviews)
+        return next(err)
+    } else {
+        const spotPOJO = spot.toJSON()
+        const Reviews = [];
+        const origReviews = spotPOJO.Reviews
+        for(let review of origReviews){
+            console.log(review)
+            let reviewObj = review
+            let user = await User.findByPk(review.userId);
+            let reviewImages = await ReviewImage.findAll({
+                where:
+                {
+                reviewId: review.id
+            }
+        })
+        let userPOJO = user.toJSON();
+        delete userPOJO.username
+        reviewObj.User = userPOJO;
+        let reviewImagesArr = [];
+        for(let reviewImage of reviewImages){
+            let reviewImagePOJO = reviewImage.toJSON();
+            delete reviewImagePOJO.reviewId;
+            delete reviewImagePOJO.createdAt;
+            delete reviewImagePOJO.updatedAt;
+            reviewImagesArr.push(reviewImagePOJO)
+
+        }
+        reviewObj.ReviewImages = reviewImagesArr;
+        Reviews.push(reviewObj)
+ }
+        // return res.json({spotReviews.dataValues.Reviews})
+        return res.json({Reviews})
     }
 })
 
@@ -157,7 +231,7 @@ router.get('/:spotId', async (req, res, next) => {
             return res.json(spotEdited)
         }else {
             const err = new Error();
-            err.errors = "Spot couldn't be found"
+            err.errors = "Spot does not exist"
             err.status = 404;
             err.title = 'No Spot Found';
             err.message = "Spot couldn't be found";
@@ -231,8 +305,27 @@ router.post('/:spotId/bookings', requireAuth, async (req, res, next) => {
     const userId = req.user.id;
     const { startDate, endDate } = req.body
 
-    if (!spotBooked || !startDate || !endDate) {
-        throw new Error('CREATE ERROR HANDLERS')
+    if(!spotBooked){
+        const err = new Error();
+        err.errors = "Spot does not exist"
+        err.status = 404;
+        err.title = 'No Spot';
+        err.message = "Spot couldn't be found";
+
+        return next(err)
+    }
+
+    if (!startDate || !endDate) {
+        const err = new Error();
+        err.errors =  {
+            "endDate": "endDate cannot be on or before startDate"
+          }
+        err.status = 400;
+        err.title = 'Improper Inputs';
+        err.message = "Validation error";
+
+        return next(err)
+
     } else {
         const possibleDupeBookings = await Booking.findAll({
             where: {
@@ -248,8 +341,17 @@ router.post('/:spotId/bookings', requireAuth, async (req, res, next) => {
             for (let booking of possibleDupeBookings) {
 
                 if (newStartDate.getTime() <= booking.endDate.getTime()) {
-                    if (newStartDate.getTime() >= booking.startDate.getTime() || newEndDate.getTime() >= booking.startDate.getTime())
-                        throw new Error('CREATE ERROR HANDLERS 2');
+                    if (newStartDate.getTime() >= booking.startDate.getTime() || newEndDate.getTime() >= booking.startDate.getTime()){
+                    const err = new Error();
+                    err.errors =  {
+                        "startDate": "Start date conflicts with an existing booking",
+                        "endDate": "End date conflicts with an existing booking"
+                      }
+                    err.status = 403;
+                    err.title = 'Spot is already booked for these dates';
+                    err.message = "Sorry, this spot is already booked for the specified dates";
+
+                    return next(err)
 
                 }
             }
@@ -260,7 +362,7 @@ router.post('/:spotId/bookings', requireAuth, async (req, res, next) => {
         })
         return res.json(newBooking)
     }
-})
+}})
 
 //create an image on a spot based on spotId
 router.post('/:spotId/images', requireAuth, async (req, res, next) => {
@@ -305,25 +407,55 @@ router.post('/:spotId/reviews', requireAuth, async (req, res, next) => {
         }
     });
     if (prevReview) {
-        throw new Error('CREATE ERROR HANDLERS')
+        const err = new Error();
+      err.errors = "User has already reviewed this spot"
+      err.status = 403;
+      err.title = 'Review Exists';
+      err.message = "User already has a review for this spot";
+
+      return next(err)
+
     }
     else if (!spot) {
-        throw new Error('CREATE ERROR HANDLERS')
+        const err = new Error();
+        err.errors = "Spot not found"
+        err.status = 404;
+        err.title = 'Invalid SpotId';
+        err.message = "Spot couldn't be found";
+
+        return next(err)
     } else if (!review || !stars) {
-        throw new Error('CREATE ERROR HANDLERS')
+        const err = new Error();
+        if(!review && !stars){
+
+            err.errors = {
+                "review": "Review text is required",
+                "stars": "Stars must be an integer from 1 to 5",
+              }
+        }else if(!review){
+            err.errors = {
+                "review": "Review text is required"}
+        }else{
+            err.errors = {
+                "stars": "Stars must be an integer from 1 to 5"}
+        }
+        err.status = 400;
+        err.message = "Validation error";
+
+        return next(err)
     }
     else {
 
         const reviewObj = await Review.create({
             review, stars, spotId, userId
         });
-        const reviewPOJO = reviewObj.toJSON();
-        delete reviewPOJO.spotId;
-        delete reviewPOJO.userId;
-        delete reviewPOJO.updatedAt;
-        delete reviewPOJO.createdAt;
-        delete reviewPOJO.id;
-        return res.json(reviewPOJO);
+        // const reviewPOJO = reviewObj.toJSON();
+        // delete reviewPOJO.spotId;
+        // delete reviewPOJO.userId;
+        // delete reviewPOJO.updatedAt;
+        // delete reviewPOJO.createdAt;
+        // delete reviewPOJO.id;
+        return res.status(201).json(reviewObj);
     }
 
 })
@@ -375,7 +507,13 @@ router.delete('/:spotId', requireAuth, async (req, res, next) => {
 
     const thisSpot = await Spot.findByPk(req.params.spotId);
     if (!thisSpot) {
-        throw new Error('CREATE ERROR HANDLERS')
+        const err = new Error();
+        err.errors = "Spot does not exist"
+        err.status = 404;
+        err.title = 'No Spot Found';
+        err.message = "Spot couldn't be found";
+
+        return next(err)
     } else {
         await thisSpot.destroy()
         res.json({
