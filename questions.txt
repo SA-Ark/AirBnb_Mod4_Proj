@@ -1,0 +1,21 @@
+In my api/spots folder on router.get '/' to get
+all spots the Kanban says I need preview and other stuff but dont have em.
+
+
+Why is req.user a thing
+
+
+on the session router I have 2 almost identical functions for login (minus the require auth)
+
+
+
+
+render postman test server errors
+
+Why do we need hooks true on ondelete cascade
+
+/////////////////////////////////////////////////////////////////////
+go back to create a booking based on spotid logic for
+error on creating a booking
+error on editing a booking
+error on deleting a booking
