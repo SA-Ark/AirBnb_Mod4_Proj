@@ -80,8 +80,9 @@ router.get(
     const { user } = req;
     if (user) {
       const thisUser = user.toSafeObject()
+      console.log({user: thisUser})
       return res.json(
-      thisUser
+      {user: thisUser}
       );
     } else return res.json({ user: null });
   }

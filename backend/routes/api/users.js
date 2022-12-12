@@ -97,7 +97,7 @@ router.post(
 
     return res.json(
       // user: user,
-      userPOJO
+     {user: userPOJO}
     );
   }
 );
