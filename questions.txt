@@ -19,3 +19,10 @@ go back to create a booking based on spotid logic for
 error on creating a booking
 error on editing a booking
 error on deleting a booking
+
+
+////
+
+npm install && npm run build && npm run sequelize --prefix backend db:seed:undo:all && npm run sequelize
+--prefix backend db:migrate:undo:all && npm run sequelize--prefix backend db:migrate && npm run sequelize
+--prefix backend db:seed:all
