@@ -5,7 +5,7 @@ const SET_USER = 'session/setUser';
 const REMOVE_USER = 'session/removeUser';
 
 const setUser = (user) => {
-    console.log("User in action:", user)
+    // console.log("User in action:", user)
   return {
     type: SET_USER,
     payload: user
@@ -78,9 +78,9 @@ export const restoreUser = () => async dispatch => {
       case SET_USER:
         newState = Object.assign({}, state);
         const actionPayload = action.payload
-        console.log(actionPayload, "!!!!!!", newState)
+
         newState.user = actionPayload;
-        console.log(newState)
+       
         return newState;
       case REMOVE_USER:
         newState = Object.assign({}, state);
