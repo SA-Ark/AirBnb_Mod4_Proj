@@ -20,7 +20,7 @@ router.get('/', async (req, res, next) => {
         page = 1
     }
     if (Number.isNaN(size)) {
-        size = 1
+        size = 100
     }
     if(page < 1 || size < 1){
         const err = new Error();
@@ -283,7 +283,9 @@ router.get('/:spotId', async (req, res, next) => {
 //create a spot
 router.post('/', requireAuth,  async (req, res, next) => {
 
-    const { address, city, state, country, lat, lng, name, description, price } = req.body
+    const { address, city, state, country, name, description, price } = req.body
+    const lng = 25;
+    const lat = 30;
     // const randomSpot = await Spot.findOne()
 
     // const keys = Object.keys(randomSpot.dataValues)
@@ -304,6 +306,7 @@ router.post('/', requireAuth,  async (req, res, next) => {
     // if(err.errors){
     //     return next(err);
     // }
+
     const sameAddress = await Spot.findOne({where: {
         address: address
     }})
@@ -500,7 +503,10 @@ router.post('/:spotId/reviews', requireAuth, async (req, res, next) => {
 
 //edit a spot by selecting it with spotId
 router.put('/:spotId', requireAuth, async (req, res, next) => {
-    const { address, city, state, country, lat, lng, name, description, price } = req.body
+    // const { address, city, state, country, lat, lng, name, description, price } = req.body
+    const { address, city, state, country, name, description, price } = req.body
+    const lat = 25
+    const lng = 30
     const keys = [];
     for (let key of Object.keys(req.body)) {
         if (req.body[key]) {

@@ -16,7 +16,7 @@ module.exports = {
       const spotImgObj = {};
       spotImgObj.spotId = spot.id;
       spotImgObj.url = 'www.google.com';
-      spotImgObj.preview = false;
+      spotImgObj.preview = true;
       allSpotImages.push(spotImgObj)
     }
 
