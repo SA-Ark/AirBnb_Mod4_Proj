@@ -31,7 +31,10 @@ const redirect = (spotId) =>{
         return (null)
     }
     console.log(allSpots[0])
-    return (
+
+    return  (
+
+
         <ul className="all-spots">
             {allSpots[0].map( spot => (
             <span key={spot.id}>
@@ -40,6 +43,7 @@ const redirect = (spotId) =>{
             </span>
             ))}
       </ul>
+
     );
 
 }
