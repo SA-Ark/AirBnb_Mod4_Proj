@@ -1,6 +1,7 @@
 import React, {useState} from "react";
 import { useDispatch, useSelector} from "react-redux";
-import { createNewSpot} from "../../store/createSpotModal";
+// import { createNewSpot} from "../../store/createSpotModal";
+import { createNewSpot} from "../../store/spots";
 import './CreateSpot.css';
 import { useHistory } from "react-router-dom";
 
@@ -16,7 +17,8 @@ const [country, setCountry] = useState("");
 const [name, setName] = useState("");
 const [description, setDescription] = useState("");
 const [price, setPrice] = useState("");
-const ownerId = useSelector(state=> state.session.user.id)
+const [url, setUrl] = useState("");
+const ownerId = useSelector(state=> state.session.user?.id)
 
 
 const history = useHistory()
@@ -25,9 +27,8 @@ const history = useHistory()
     e.preventDefault();
 
     const newSpot = {address, city, state, country, name, description, price, ownerId}
-
-    dispatch(createNewSpot(newSpot))
-    history.push('/spots')
+    return dispatch(createNewSpot(newSpot, url))
+    // history.push('/spots')
 
   };
 
@@ -103,6 +104,16 @@ return(
             placeholder="Price"
             value={price}
             onChange={(e) => setPrice(e.target.value)}
+            required
+          />
+        </label>
+        <label>
+          url
+          <input
+            type="text"
+            placeholder="Image url"
+            value={url}
+            onChange={(e) => setUrl(e.target.value)}
             required
           />
         </label>
