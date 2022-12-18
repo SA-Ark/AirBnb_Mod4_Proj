@@ -4,15 +4,17 @@ import { csrfFetch } from './csrf';
 const EDIT_SPOT = "/spots/:spotId";
 
 
-const editSpot = (spot)=>{
+const editSpot = (object)=>{
   console.log("Editing this spot")
   return {
     type: EDIT_SPOT,
-    payload: spot
+    payload: object
   }
 }
 
-export const editSpotDetailsBySpotId = (spotId, newSpot)=> async dispatch =>{
+export const editSpotDetailsBySpotId = (spotId, newSpot, spotImage, fName, lName, numReviews, avgStarRating)=> async dispatch =>{
+
+ console.log(fName, lName, "WHATISGOINGON")
   const {address, city, state, country, name, description, price} = newSpot
   const res = await csrfFetch(`/api/spots/${spotId}`, {
     method: 'PUT',
@@ -22,8 +24,24 @@ export const editSpotDetailsBySpotId = (spotId, newSpot)=> async dispatch =>{
   })
   if(res.ok){
     const data = await res.json();
-    return dispatch(editSpot(data))
+    const res2 = await csrfFetch(`/api/spots/${spotId}/images`, {
+      method: 'POST',
+      body: JSON.stringify({
+        url: spotImage,
+        preview: true
+      })
+    })
+    data.Owner = `${fName}, ${lName}`
+    data.numReviews = numReviews;
+    data.avgStarRating = avgStarRating
+    if(res2.ok){
+      const normalized = await res2.json()
+      data.spotImage = normalized
+
+    }
+    dispatch(editSpot(data))
   }
+
 }
 
 
@@ -35,9 +53,18 @@ const editSpotReducer = (state = initialState, action) => {
   let newState = {...state};
   switch (action.type) {
     case EDIT_SPOT:
+
       const spot = action.payload
+      console.log(spot, "SPOTTTTTTHIIIIIIIII")
+
+      // if(spot){
+
+      //   spot.SpotImage = action.payload.spotImage
+
+      // }
       newState = { ...spot};
-      console.log('NEW SPOT', newState)
+
+      newState = newState
       return newState;
 
     default:

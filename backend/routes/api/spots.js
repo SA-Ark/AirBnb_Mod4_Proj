@@ -221,11 +221,12 @@ router.get('/:spotId/reviews', async (req, res, next) => {
         Reviews.push(reviewObj)
  }
         // return res.json({spotReviews.dataValues.Reviews})
+        console.log(Reviews)
         return res.json({Reviews})
     }
 })
 
-//get the spot by spotId
+//get the spot details by spotId
 router.get('/:spotId', async (req, res, next) => {
     const spot = await Spot.findByPk(req.params.spotId, {include: {
         model: User,
@@ -246,7 +247,7 @@ router.get('/:spotId', async (req, res, next) => {
     })
 
         if(!reviews.length){
-            spotEdited.avgRating= 'No ratings on this spot yet';
+            spotEdited.avgStarRating= 'No ratings on this spot yet';
         }else{
             for (let review of reviews){
                 starSum += review.stars
@@ -256,15 +257,22 @@ router.get('/:spotId', async (req, res, next) => {
             spotEdited.previewImage= 'No images for this spot yet';
         }else{
             for(let spotImage of spotImages){
-                    previewImages.push(spotImage)
+
+                    previewImages.push(spotImage.dataValues)
+
                 }
             }
+            if(!reviews.length){
+                spotEdited.avgStarRating = "No reviews yet"
+            }else{
 
-            spotEdited.avgStarRating = starSum/reviews.length;
+                spotEdited.avgStarRating = starSum/reviews.length;
+            }
             spotEdited.numReviews = reviews.length
             spotEdited.SpotImages = previewImages;
             spotEdited.Owner = spotEdited.User;
             delete spotEdited.User;
+
             return res.json(spotEdited)
         }else {
             const err = new Error();
@@ -315,6 +323,7 @@ router.post('/', requireAuth,  async (req, res, next) => {
         err.message = "Validation Error";
         err.status = 400;
         err.errors = {
+            "Exists": "Spot already exists at this address",
             "address": "Street address is required",
             "city": "City is required",
             "state": "State is required",
@@ -444,7 +453,8 @@ router.post('/:spotId/reviews', requireAuth, async (req, res, next) => {
     const prevReview = await Review.findOne({
         where:
         {
-            spotId: req.params.spotId
+            spotId: req.params.spotId,
+            userId: userId
         }
     });
     if (prevReview) {
