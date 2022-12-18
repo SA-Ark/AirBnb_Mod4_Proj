@@ -117,7 +117,7 @@ return(
             required
           />
         </label>
-        <button type="submit">Create</button>
+        <button type="submit">Create Spot</button>
       </form>
     </>
 

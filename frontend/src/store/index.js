@@ -4,6 +4,7 @@ import editSpotReducer from "./editSpotModal";
 import sessionReducer from './session';
 import spotDetailsReducer from "./spotDetails";
 import spotsReducer from "./spots";
+import reviewsReducer from "./reviews";
 
 
 const rootReducer = combineReducers({
@@ -11,6 +12,7 @@ const rootReducer = combineReducers({
   spots: spotsReducer,
   spotDetails: spotDetailsReducer,
   editSpot: editSpotReducer,
+  reviews: reviewsReducer
 
 });
 

@@ -9,6 +9,8 @@ function EditSpotModal() {
   const dispatch = useDispatch();
   let Spot = useSelector(state => state.spotDetails);
 
+  let user = useSelector(state=> state.session.user)
+
 const [address, setAddress] = useState(Spot.address);
 const [city, setCity] = useState(Spot.city);
 const [state, setState] = useState(Spot.state);
@@ -16,15 +18,20 @@ const [country, setCountry] = useState(Spot.country);
 const [name, setName] = useState(Spot.name);
 const [description, setDescription] = useState(Spot.description);
 const [price, setPrice] = useState(Spot.price);
+const [spotImage, setSpotImage] = useState(Spot.spotImage)
 
+const {firstName, lastName} = user;
+const {numReviews, avgStarRating} = Spot;
 
+console.log(firstName, lastName, "USER")
+console.log(Spot, "DEBUG")
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     const newSpot = {address, city, state, country, name, description, price}
 
-    return dispatch(editSpotDetailsBySpotId(Spot.id, newSpot))
+    return dispatch(editSpotDetailsBySpotId(Spot.id, newSpot, spotImage, firstName, lastName, numReviews, avgStarRating ))
 
   };
 
@@ -100,6 +107,16 @@ return(
             placeholder="Price"
             value={price}
             onChange={(e) => setPrice(e.target.value)}
+            required
+          />
+        </label>
+        <label>
+          spot image url
+          <input
+            type="text"
+            placeholder="url"
+            value={spotImage}
+            onChange={(e) => setSpotImage(e.target.value)}
             required
           />
         </label>

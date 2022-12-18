@@ -33,3 +33,21 @@ npm install && npm run build && npm run sequelize --prefix backend db:seed:undo:
 how to hide create spot modal
 how to show SpotImages
 how to authorize create new spot only if logged in
+
+
+
+
+id:72
+ownerId:8
+address:falsey
+city:ggg
+state:ggg
+country:ggg
+lat:25
+lng:30
+name:gggg
+description:gggg
+price:444
+createdAt:2022-12-16T21:50:42.210Z
+updatedAt:2022-12-18T03:27:42.414Z
+SpotImage:undefined

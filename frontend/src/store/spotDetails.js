@@ -37,6 +37,8 @@ export const findSpotDetailsBySpotId = (spotId)=> async dispatch => {
   const res = await csrfFetch(`/api/spots/${spotId}`)
   if (res.ok){
     const data = await res.json();
+    console.log(data)
+
     return dispatch(findSpotDetails(data))
   }
 }
@@ -46,9 +48,36 @@ const spotDetailsReducer = (state = initialState, action) => {
   let newState = {...state};
   switch (action.type) {
     case GET_SPOT_DETAILS:
-      const spot = action.payload
+      let spot
+
+        spot = action.payload
+      
+        if(spot.Owner && typeof spot.Owner !== "string"){
+
+          spot.Owner = spot.Owner?.firstName + " " + spot.Owner?.lastName
+        }
+
+    console.log(spot, "SPOTTTTTT")
+    if(spot.SpotImages){
+        let spotImage;
+
+        for(let image of spot.SpotImages){
+          if(image.preview){
+            spotImage = image.url
+          }
+        }
+        delete spot.SpotImages;
+        if(spotImage){
+
+          spot.spotImage = spotImage
+        }else{
+          spot.spotImage = "no url was given for the image"
+        }
+      }else{
+        spot.spotImage = spot.spotImage.url
+      }
       newState = {...spot};
-      console.log('SPOT DETAILS', newState)
+
       return newState;
     case DELETE_SPOT:
       return newState;
