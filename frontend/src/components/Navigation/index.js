@@ -12,8 +12,8 @@ function Navigation({ isLoaded }){
 
   return (
     <ul className="nav-link">
-      <li>
-        <NavLink exact to="/"><i className="fa-brands fa-airbnb">Home</i></NavLink>
+      <li className="home-link">
+        <NavLink exact to="/"><i className="fa-brands fa-airbnb">₳฿₦฿</i></NavLink>
       </li>
       {sessionUser?
     <div className= "create-spot-button-div">
@@ -24,7 +24,7 @@ function Navigation({ isLoaded }){
 
       modalComponent={<CreateSpotModal></CreateSpotModal>}
       buttonText="AirBnb your home"
-     
+
 
     />
 

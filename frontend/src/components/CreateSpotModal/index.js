@@ -56,7 +56,7 @@ const history = useHistory()
     setPrice("");
     setUrl("");
     if(!errors){
-      history.push(`/spots/${spotId}`)
+      history.push(`/spots`)
     }
 
 
