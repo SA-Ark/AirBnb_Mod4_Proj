@@ -1,0 +1,17 @@
+.reviewer{
+    display:flex;
+    /* justify-content: */
+}
+
+/* .reviewer * {
+    margin-left: 10px;
+} */
+
+.name{
+    margin-top: 30px;
+}
+
+
+.review{
+    margin-top: -10px;
+}

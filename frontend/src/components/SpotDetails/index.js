@@ -36,11 +36,8 @@ const handleDelete = () =>{
     let user = useSelector(state => state.session);
     const [show, setShow] = useState(false);
     const [showReviews, setShowReviews] = useState(false)
-    console.log(show)
-    const showModal = ()=>{
-        console.log('SHOW')
-        setShow(true)
-    }
+
+  
 
     const toggleReviews = ()=>{
         setShowReviews(!showReviews)
@@ -53,27 +50,6 @@ const handleDelete = () =>{
 
 
 
-// let spotImage;
-// let spotData;
-// if(Object.keys(Spot).length){
-//     if(Spot.SpotImages){
-
-
-//     for (let image of Spot.SpotImages){
-//         if(image.preview === true){
-//             spotImage = image
-//             break;
-//         }
-//     }
-// }
-// }
-// spotData = {...Spot}
-// // delete spotData[15]
-// delete spotData.SpotImages
-// console.log(Spot.SpotImages, "WHAT")
-//  spotData.SpotImage= spotImage?.url
-// // spotData[15]= Spot.Owner
-// console.log(spotData, "SPOTDATA")
 
 
 let SpotKeys = []
@@ -87,31 +63,39 @@ let SpotKeys = []
         return (null)
     }
 
-//     <div className="all-spots">
-//     {allSpots[0].map( spot => (
-//     <div key={spot.id} className="spot-card">
-//         <div key={spot.ownerId} className="card-body">
-//         <img src={spot.previewImage}/>
-//         <p>{spot.description}</p>
-//         <button onClick={()=>redirect(spot.id)}>Spot Details</button>
-//     </div>
-//     </div>
-//     ))}
-// </div>
+
 
     return (
+        <div className="whole-thing">
 
         <div className="all-details">
-            <h2>{Spot.description}</h2>
+                <h2>{Spot.name}</h2>
+
              <div className="details-card">
-                <h5>{Spot.name}</h5>
-                <p>{Spot.avgStarRating} {Spot.numReviews !== 0? "stars" : null} | {Spot.numReviews} reviews  |  {Spot.city}, {Spot.state}, {Spot.country} </p>
+                <div className="above-spot">
+                <p className="star-avg">
+                ★{Spot.avgStarRating}
+                </p>
+                <p>
+                {Spot.numReviews} reviews
+                </p>
+                <p>
+                {Spot.city}, {Spot.state}
+                </p>
+                <p>
+                {Spot.country}
+                </p>
+
+
+                 </div>
                 <div className="img-div">
                 <img src={Spot.previewImage}/>
                 </div>
                 <p>{Spot.address}</p>
+                <div className="price-div">
                 <h3>Entire home hosted by: {Spot.Owner}</h3>
-                <h5>${Spot.price}/ Night</h5>
+                <h3>${Spot.price}/ Night</h3>
+                </div>
 
 
              </div>
@@ -138,7 +122,7 @@ let SpotKeys = []
 
             </div>
 
-
+            </div>
     );
 
 }

@@ -23,12 +23,7 @@ function ReviewsDiv() {
 
     let reviewsOk;
     reviews ? reviewsOk = Object.keys(reviews) : reviewsOk = null
-    if (reviews) {
 
-        console.log(reviews["0"], reviews, "REVIEWS")
-        console.log(reviews.map(review => review.id))
-
-    }
 
     const [showReview, setShowReview] = useState(false)
 
@@ -36,7 +31,7 @@ function ReviewsDiv() {
         setShowReview(true)
     }
     const handleDelete = async (reviewId) => {
-        console.log("Hi", reviewId)
+
         setDeleted(!deleted)
 
         await dispatch(deleteReviewByReviewId(reviewId))
@@ -44,22 +39,6 @@ function ReviewsDiv() {
     }
 
 
-    // return (
-    //     <div>
-    //         <ul>
-    //             {reviewsOk?.length? reviews?.map((review)=>
-    //             <span>
-    //                 <li key={review.id}>{`${review.id}:${review}`}</li>)
-    //                 {showReview?  <button onClick={handleDelete(review.id)}>Delete Review</button>: null}
-
-    //             </span>)
-    //             : null
-    //             }
-    //         </ul>
-    //         <button onClick = {showReviewForm}>Create A New Review</button>
-    //         {showReview? <ReviewForm></ReviewForm>:null}
-    //     </div>
-    // )
 
     return (
         <div>
@@ -68,7 +47,13 @@ function ReviewsDiv() {
                 {reviewsOk?.length ? reviews?.map((review) =>
 
                     <div key={review.User.id}>
-                        <p>{`${review.User.firstName} ${review.User.lastName}:${review.review}, ${review.stars} stars`}</p>
+                        <div className="reviews">
+                            <div className="reviewer">
+                            <h2 className="prof-pic">😍</h2>
+                           <p className="name">{review.User.firstName} {review.User.lastName}:</p>
+                        </div>
+                            <p className="review">{review.review}</p>
+                        </div>
                         {user && user.id === review.User.id ?
 
                             <button key={review.id} onClick={() => handleDelete(review.id)}>Delete Review</button>
@@ -82,10 +67,7 @@ function ReviewsDiv() {
 
 
             {user ?
-                //             <button onClick = {showReviewForm}>Create A New Review</button>
-                //             : null
-                //
-                //             {showReview? <ReviewForm></ReviewForm>:null}
+
                 <OpenModalButton
                     modalComponent={<ReviewForm></ReviewForm>}
                     buttonText="Create A New Review"

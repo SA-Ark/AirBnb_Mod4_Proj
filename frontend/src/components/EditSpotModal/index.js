@@ -11,22 +11,28 @@ function EditSpotModal() {
 
   let user = useSelector(state=> state.session.user)
 
-const [address, setAddress] = useState(Spot.address);
-const [city, setCity] = useState(Spot.city);
-const [state, setState] = useState(Spot.state);
-const [country, setCountry] = useState(Spot.country);
-const [name, setName] = useState(Spot.name);
-const [description, setDescription] = useState(Spot.description);
-const [price, setPrice] = useState(Spot.price);
-const [previewImage, setSpotImage] = useState(Spot.previewImage)
+// const [address, setAddress] = useState(Spot.address);
+// const [city, setCity] = useState(Spot.city);
+// const [state, setState] = useState(Spot.state);
+// const [country, setCountry] = useState(Spot.country);
+// const [name, setName] = useState(Spot.name);
+// const [description, setDescription] = useState(Spot.description);
+// const [price, setPrice] = useState(Spot.price);
+// const [previewImage, setSpotImage] = useState(Spot.previewImage)
+const [address, setAddress] = useState("");
+const [city, setCity] = useState("");
+const [state, setState] = useState("");
+const [country, setCountry] = useState("");
+const [name, setName] = useState("");
+const [description, setDescription] = useState("");
+const [price, setPrice] = useState("");
+const [previewImage, setSpotImage] = useState("")
 const [errors, setErrors] = useState([]);
 const { closeModal } = useModal();
 
 const {firstName, lastName} = user;
 const {numReviews, avgStarRating} = Spot;
 
-console.log(firstName, lastName, "USER")
-console.log(Spot, "DEBUG")
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -44,12 +50,12 @@ console.log(Spot, "DEBUG")
 return(
     <>
       <h1>Update Spot Form</h1>
+      <div className="update-spot-form">
       <form onSubmit={handleSubmit}>
       <ul>
           {errors.map((error, idx) => <li key={idx}>{error}</li>)}
         </ul>
-        <label>
-          address
+
           <input
             type="text"
             placeholder="Address"
@@ -57,9 +63,7 @@ return(
             onChange={(e) => setAddress(e.target.value)}
             required
           />
-        </label>
-        <label>
-          city
+
           <input
             type="text"
             placeholder="City"
@@ -67,9 +71,7 @@ return(
             onChange={(e) => setCity(e.target.value)}
             required
           />
-        </label>
-        <label>
-          state
+
           <input
             type="text"
             placeholder="State"
@@ -77,9 +79,8 @@ return(
             onChange={(e) => setState(e.target.value)}
             required
           />
-        </label>
-        <label>
-          country
+
+
           <input
             type="text"
             placeholder="Country"
@@ -87,9 +88,7 @@ return(
             onChange={(e) => setCountry(e.target.value)}
             required
           />
-        </label>
-        <label>
-          name
+
           <input
             type="text"
             placeholder="Name"
@@ -97,9 +96,7 @@ return(
             onChange={(e) => setName(e.target.value)}
             required
           />
-        </label>
-        <label>
-          description
+
           <input
             type="text"
             placeholder="Description"
@@ -107,19 +104,15 @@ return(
             onChange={(e) => setDescription(e.target.value)}
             required
           />
-        </label>
-         <label>
-          price
+
           <input
-            type="price"
+            type="number"
             placeholder="Price"
             value={price}
             onChange={(e) => setPrice(e.target.value)}
             required
           />
-        </label>
-        <label>
-          spot image url
+
           <input
             type="url"
             placeholder="url"
@@ -127,9 +120,10 @@ return(
             onChange={(e) => setSpotImage(e.target.value)}
             required
           />
-        </label>
-        <button type="submit">Update</button>
+
+        <button type="submit" className="submit-update-spot">Update</button>
       </form>
+      </div>
     </>
 
 

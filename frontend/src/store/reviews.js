@@ -6,7 +6,7 @@ const CREATE_REVIEW_BY_SPOT_ID = "/api/spots/:spotId/reviews"
 const DELETE_REVIEW = "/api/reviews/:reviewId"
 
 const getReviews = (reviews)=>{
-    console.log("making the state for reviews")
+
     return {
         type: GET_REVIEWS_BY_SPOT_ID,
         payload: reviews
@@ -14,7 +14,7 @@ const getReviews = (reviews)=>{
 }
 
 const createReview = (newReview)=>{
-    console.log("Creating this review")
+
     return {
       type: CREATE_REVIEW_BY_SPOT_ID,
       payload: newReview
@@ -22,7 +22,7 @@ const createReview = (newReview)=>{
   }
 
   const deleteReview = (reviewId)=>{
-    console.log("deleting this review")
+
     return {
       type: DELETE_REVIEW,
       payload: reviewId
@@ -46,7 +46,7 @@ export const getReviewsBySpotId = (spotId) => async dispatch =>{
     const res = await csrfFetch(`/api/spots/${spotId}/reviews`)
     if(res.ok){
         const data = await res.json();
-        console.log(data, "ALL REVIEWS BABY")
+
         dispatch(getReviews(data))
     }
 }
@@ -60,7 +60,7 @@ export const createNewReview = (newReview, spotId, username) => async dispatch =
     })
     if(res.ok){
         const data = await res.json();
-        // data.username = username
+
        const res2 = await csrfFetch(`/api/spots/${spotId}/reviews`)
        if(res2.ok){
         const allReviews = await res2.json()
@@ -80,15 +80,14 @@ const reviewsReducer = (state = initialState, action)=>{
             const reviews = action.payload;
 
             newState = {...reviews}
-            console.log(newState, "REVIEW USERNAME")
+
             return newState;
         case CREATE_REVIEW_BY_SPOT_ID:
             const newReview = action.payload;
             newState={...newState, ...newReview};
             return newState;
         case DELETE_REVIEW:
-            console.log(Object.values(newState), "REVIEW VALUES DEBUG RENDER")
-            // for (let review of )
+
             return newState
         default:
             return newState;

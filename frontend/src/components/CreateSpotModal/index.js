@@ -64,13 +64,13 @@ const history = useHistory()
 
 return(
     <>
+      <div className="create-spot-form">
       <h1>Create Spot Form</h1>
       <form onSubmit={handleSubmit}>
       <ul>
           {errors.map((error, idx) => <li key={idx}>{error}</li>)}
         </ul>
-        <label>
-          address
+
           <input
             type="text"
             placeholder="Address"
@@ -78,9 +78,7 @@ return(
             onChange={(e) => setAddress(e.target.value)}
             required
           />
-        </label>
-        <label>
-          city
+
           <input
             type="text"
             placeholder="City"
@@ -88,9 +86,7 @@ return(
             onChange={(e) => setCity(e.target.value)}
             required
           />
-        </label>
-        <label>
-          state
+
           <input
             type="text"
             placeholder="State"
@@ -98,9 +94,7 @@ return(
             onChange={(e) => setState(e.target.value)}
             required
           />
-        </label>
-        <label>
-          country
+
           <input
             type="text"
             placeholder="Country"
@@ -108,9 +102,7 @@ return(
             onChange={(e) => setCountry(e.target.value)}
             required
           />
-        </label>
-        <label>
-          name
+
           <input
             type="text"
             placeholder="Name"
@@ -118,9 +110,7 @@ return(
             onChange={(e) => setName(e.target.value)}
             required
           />
-        </label>
-        <label>
-          description
+
           <input
             type="text"
             placeholder="Description"
@@ -128,9 +118,7 @@ return(
             onChange={(e) => setDescription(e.target.value)}
             required
           />
-        </label>
-         <label>
-          price
+
           <input
             type="number"
             placeholder="Price"
@@ -138,9 +126,7 @@ return(
             onChange={(e) => setPrice(e.target.value)}
             required
           />
-        </label>
-        <label>
-          url
+
           <input
             type="url"
             placeholder="Image url"
@@ -148,9 +134,10 @@ return(
             onChange={(e) => setUrl(e.target.value)}
             required
           />
-        </label>
-        <button type="submit">Create Spot</button>
+
+        <button type="submit" className="submit-create-spot">Create Spot</button>
       </form>
+      </div>
     </>
 
 
