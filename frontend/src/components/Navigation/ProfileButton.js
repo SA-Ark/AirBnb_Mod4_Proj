@@ -7,9 +7,12 @@ import OpenModalButton from '../OpenModalButton';
 import LoginFormModal from '../LoginFormModal';
 import SignupFormModal from '../SignupFormModal';
 
+
+
 function ProfileButton({ user }) {
   const dispatch = useDispatch();
   const [showMenu, setShowMenu] = useState(false);
+  const [showOtherMenu, setShowOtherMenu] = useState(false)
   const ulRef = useRef();
 
   const openMenu = () => {
@@ -26,37 +29,56 @@ function ProfileButton({ user }) {
       }
     };
 
+
+
     document.addEventListener('click', closeMenu);
 
     return () => document.removeEventListener("click", closeMenu);
   }, [showMenu]);
+  const toggleMenu = ()=>{
+    setShowMenu(!showMenu)
+    setShowOtherMenu(!showOtherMenu)
 
+  }
   const logout = (e) => {
     e.preventDefault();
+    setShowMenu(false)
     dispatch(sessionActions.logout());
   };
 
   const ulClassName = "profile-dropdown" + (showMenu ? "" : " hidden");
 
   return (
+
     <>
-      <button onClick={openMenu}>
+
+      <button onClick={toggleMenu} className ="icon-button">
 
       <i className="fas fa-user-circle"></i>
 
       </button>
       <ul className={ulClassName} ref={ulRef}>
-        {user ? (
-          <>
+
+
+
+        {user ?
+
+        (showMenu?
+
+          <div className="drop-down">
+
             <li>{user.username}</li>
             <li>{user.firstName} {user.lastName}</li>
             <li>{user.email}</li>
             <li>
               <button onClick={logout}>Log Out</button>
             </li>
-          </>
-        ) : (
+
+          </div>
+
+        : null) : ( showOtherMenu &&
           <>
+          <div className="log-signup">
             <li>
               <OpenModalButton
                 buttonText="Log In"
@@ -69,10 +91,12 @@ function ProfileButton({ user }) {
                 modalComponent={<SignupFormModal />}
               />
             </li>
+            </div>
           </>
         )}
-      </ul>
-    </>
+</ul>
+</>
+
   );
 }
 

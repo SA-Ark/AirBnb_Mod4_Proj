@@ -5,7 +5,7 @@ const EDIT_SPOT = "/spots/:spotId";
 
 
 const editSpot = (object)=>{
-  console.log("Editing this spot")
+
   return {
     type: EDIT_SPOT,
     payload: object
@@ -14,7 +14,7 @@ const editSpot = (object)=>{
 
 export const editSpotDetailsBySpotId = (spotId, newSpot, spotImage, fName, lName, numReviews, avgStarRating)=> async dispatch =>{
 
- console.log(fName, lName, "WHATISGOINGON")
+
   const {address, city, state, country, name, description, price} = newSpot
   const res = await csrfFetch(`/api/spots/${spotId}`, {
     method: 'PUT',
@@ -55,13 +55,8 @@ const editSpotReducer = (state = initialState, action) => {
     case EDIT_SPOT:
 
       const spot = action.payload
-      console.log(spot, "SPOTTTTTTHIIIIIIIII")
 
-      // if(spot){
 
-      //   spot.SpotImage = action.payload.spotImage
-
-      // }
       newState = { ...spot};
 
       newState = newState

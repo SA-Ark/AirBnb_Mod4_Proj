@@ -1,1 +1,19 @@
 /* TODO Add site wide styles */
+
+
+button{
+    border: 1px solid black;
+    border-radius: 10px;
+    background-color: white;
+    color: black;
+
+}
+
+button:hover{
+    box-shadow: 5px 2px 2px;
+    cursor: pointer;
+}
+
+*{
+    font-family: sans-serif
+}

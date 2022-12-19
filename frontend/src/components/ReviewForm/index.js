@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { createNewReview } from '../../store/reviews';
 import { findSpotDetailsBySpotId } from '../../store/spotDetails';
 import { useModal } from '../../context/Modal';
+import './ReviewForm.css'
 
 function ReviewForm() {
     const [review, setReview] = useState("");
@@ -16,7 +17,7 @@ function ReviewForm() {
     const [errors, setErrors] = useState([]);
     const { closeModal } = useModal();
 
-    console.log(Spot, "SPOT TRY GET ID")
+
     useEffect( () => {
 
          dispatch(findSpotDetailsBySpotId(Spot.id))
@@ -26,7 +27,7 @@ function ReviewForm() {
     const handleSubmit = async (e)=>{
         e.preventDefault();
         const newReview = {review, stars}
-        console.log(newReview, id)
+        
         setReviewCreated(!reviewCreated)
 
          await dispatch(createNewReview(newReview, id, username)).then(closeModal).catch(async (res) => {
@@ -38,6 +39,7 @@ function ReviewForm() {
     return (
         <>
           <h1>Create Review Form</h1>
+          <div className="create-review-form">
           <form onSubmit={handleSubmit}>
           <ul>
           {errors.map((error, idx) => <li key={idx}>{error}</li>)}
@@ -62,8 +64,9 @@ function ReviewForm() {
                 required
               />
             </label>
-            <button type="submit">Create Review</button>
+            <button type="submit" className="submit-create-review">Create Review</button>
             </form>
+            </div>
             </>
             )
 }

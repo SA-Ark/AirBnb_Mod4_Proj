@@ -6,14 +6,14 @@ const DELETE_SPOT = '/spots/:spotId'
 
 
 const findSpotDetails = (spot)=>{
-  console.log("Finding this spot")
+ 
   return {
     type: GET_SPOT_DETAILS,
     payload: spot
   }
 }
 const deleteSpot = (spotId)=>{
-  console.log(`Deleting spot #${spotId}`)
+
   return {
     type: DELETE_SPOT,
 
@@ -37,7 +37,6 @@ export const findSpotDetailsBySpotId = (spotId)=> async dispatch => {
   const res = await csrfFetch(`/api/spots/${spotId}`)
   if (res.ok){
     const data = await res.json();
-    console.log(data)
 
     return dispatch(findSpotDetails(data))
   }
@@ -57,7 +56,7 @@ const spotDetailsReducer = (state = initialState, action) => {
           spot.Owner = spot.Owner?.firstName + " " + spot.Owner?.lastName
         }
 
-    console.log(spot, "SPOTTTTTT")
+
     if(spot.SpotImages){
         let spotImage;
 

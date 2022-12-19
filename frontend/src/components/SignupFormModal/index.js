@@ -25,7 +25,7 @@ function SignupFormModal() {
           const data = await res.json();
           data.errors = Object.values(data.errors)
           if (data && data.errors) setErrors(data.errors);
-          console.log(data, "ERROR DATA FROM DUPE SIGNUP")
+         
         });
     }
     return setErrors(['Confirm Password field must be the same as the Password field']);
@@ -34,6 +34,7 @@ function SignupFormModal() {
   return (
     <>
       <h1>Sign Up</h1>
+      <div className="sign-up-form">
       <form onSubmit={handleSubmit}>
         <ul>
           {errors.map((error, idx) => <li key={idx}>{error}</li>)}
@@ -41,6 +42,7 @@ function SignupFormModal() {
         <label>
           Email
           <input
+            placeholder="email"
             type="text"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -50,6 +52,7 @@ function SignupFormModal() {
         <label>
           Username
           <input
+          placeholder="username"
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
@@ -59,6 +62,7 @@ function SignupFormModal() {
         <label>
           First Name
           <input
+          placeholder="first name"
             type="text"
             value={firstName}
             onChange={(e) => setFirstName(e.target.value)}
@@ -68,6 +72,7 @@ function SignupFormModal() {
         <label>
           Last Name
           <input
+          placeholder="last name"
             type="text"
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
@@ -77,6 +82,7 @@ function SignupFormModal() {
         <label>
           Password
           <input
+          placeholder="password"
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -86,14 +92,16 @@ function SignupFormModal() {
         <label>
           Confirm Password
           <input
+          placeholder="submit same password again"
             type="password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             required
           />
         </label>
-        <button type="submit">Sign Up</button>
+        <button type="submit" className="submit-sign-up">Sign Up</button>
       </form>
+      </div>
     </>
   );
 }

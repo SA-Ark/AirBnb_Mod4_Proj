@@ -5,7 +5,7 @@ const CREATE_SPOT = "/spotsAYYYYYYY";
 
 
 const findSpots = (spots) => {
-    console.log("Finding all spots")
+
   return {
     type: GET_SPOTS,
     payload: spots
@@ -13,7 +13,7 @@ const findSpots = (spots) => {
 };
 
 const createSpot = (spot)=>{
-  console.log("Creating this spot")
+
   return {
     type: CREATE_SPOT,
     payload: spot
@@ -53,11 +53,11 @@ export const createNewSpot = (newSpot, url)=> async dispatch =>{
 
 export const findAllSpots = () => async dispatch => {
   const res = await csrfFetch('/api/spots/');
-  // console.log(res)
+
   if(res.ok){
     const data = await res.json();
 
-    // console.log(data)
+
    await dispatch(findSpots(data));
    return data;
   }
@@ -72,11 +72,11 @@ const spotsReducer = (state = initialState, action) => {
     case GET_SPOTS:
       const spots = action.payload
       newState = {...spots};
-      console.log("NEW STATE", newState)
+     
       return newState;
     case CREATE_SPOT:
       let newSpot = action.payload
-      console.log(newSpot, "NEWSPOTTTTTTT")
+
       newState.Spots.push(newSpot)
       return newState
     default:
