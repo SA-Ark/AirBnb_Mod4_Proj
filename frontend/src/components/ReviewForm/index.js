@@ -3,7 +3,7 @@ import React, {useState, useEffect} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createNewReview } from '../../store/reviews';
 import { findSpotDetailsBySpotId } from '../../store/spotDetails';
-
+import { useModal } from '../../context/Modal';
 
 function ReviewForm() {
     const [review, setReview] = useState("");
@@ -13,6 +13,8 @@ function ReviewForm() {
     const User = useSelector(state => state.session)
     const username = User.user?.username
     const [reviewCreated, setReviewCreated] = useState(false)
+    const [errors, setErrors] = useState([]);
+    const { closeModal } = useModal();
 
     console.log(Spot, "SPOT TRY GET ID")
     useEffect( () => {
@@ -26,14 +28,20 @@ function ReviewForm() {
         const newReview = {review, stars}
         console.log(newReview, id)
         setReviewCreated(!reviewCreated)
-        
-         await dispatch(createNewReview(newReview, id, username))
-    }
+
+         await dispatch(createNewReview(newReview, id, username)).then(closeModal).catch(async (res) => {
+            const data = await res.json();
+            data.errors = Object.values(data.errors)
+            if (data && data.errors) setErrors(data.errors)});
+            }
+
     return (
         <>
           <h1>Create Review Form</h1>
           <form onSubmit={handleSubmit}>
-
+          <ul>
+          {errors.map((error, idx) => <li key={idx}>{error}</li>)}
+        </ul>
             <label>
               review
               <input
@@ -47,7 +55,7 @@ function ReviewForm() {
             <label>
               stars
               <input
-                type="text"
+                type="number"
                 placeholder="Stars"
                 value={stars}
                 onChange={(e) => setStars(e.target.value)}

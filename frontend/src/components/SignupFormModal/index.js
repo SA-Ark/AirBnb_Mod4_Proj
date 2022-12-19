@@ -23,7 +23,9 @@ function SignupFormModal() {
         .then(closeModal)
         .catch(async (res) => {
           const data = await res.json();
+          data.errors = Object.values(data.errors)
           if (data && data.errors) setErrors(data.errors);
+          console.log(data, "ERROR DATA FROM DUPE SIGNUP")
         });
     }
     return setErrors(['Confirm Password field must be the same as the Password field']);
