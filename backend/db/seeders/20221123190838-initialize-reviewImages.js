@@ -16,7 +16,7 @@ module.exports = {
     for (let review of allReviews){
       const reviewImgObj = {};
       reviewImgObj.reviewId = review.id;
-      reviewImgObj.url = 'www.google.com';
+      reviewImgObj.url = 'https://i.pinimg.com/550x/24/ba/43/24ba43dcfc2c8a1687fbc70c13a657be.jpg';
       allReviewImages.push(reviewImgObj)
     }
 

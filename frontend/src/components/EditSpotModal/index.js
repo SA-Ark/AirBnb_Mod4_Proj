@@ -18,7 +18,7 @@ const [country, setCountry] = useState(Spot.country);
 const [name, setName] = useState(Spot.name);
 const [description, setDescription] = useState(Spot.description);
 const [price, setPrice] = useState(Spot.price);
-const [spotImage, setSpotImage] = useState(Spot.spotImage)
+const [previewImage, setSpotImage] = useState(Spot.previewImage)
 
 const {firstName, lastName} = user;
 const {numReviews, avgStarRating} = Spot;
@@ -31,7 +31,7 @@ console.log(Spot, "DEBUG")
 
     const newSpot = {address, city, state, country, name, description, price}
 
-    return dispatch(editSpotDetailsBySpotId(Spot.id, newSpot, spotImage, firstName, lastName, numReviews, avgStarRating ))
+    return dispatch(editSpotDetailsBySpotId(Spot.id, newSpot, previewImage, firstName, lastName, numReviews, avgStarRating ))
 
   };
 
@@ -115,7 +115,7 @@ return(
           <input
             type="text"
             placeholder="url"
-            value={spotImage}
+            value={previewImage}
             onChange={(e) => setSpotImage(e.target.value)}
             required
           />

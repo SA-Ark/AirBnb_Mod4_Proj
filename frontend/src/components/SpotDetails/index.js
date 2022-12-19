@@ -3,7 +3,9 @@ import { Link, useHistory, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { findSpotDetailsBySpotId } from '../../store/spotDetails';
 import { deleteSpotBySpotId } from '../../store/spotDetails';
+import OpenModalButton from '../OpenModalButton';
 import ReviewsDiv from '../ReviewsDiv';
+
 
 import EditSpotModal from '../EditSpotModal';
 
@@ -85,20 +87,45 @@ let SpotKeys = []
         return (null)
     }
 
+//     <div className="all-spots">
+//     {allSpots[0].map( spot => (
+//     <div key={spot.id} className="spot-card">
+//         <div key={spot.ownerId} className="card-body">
+//         <img src={spot.previewImage}/>
+//         <p>{spot.description}</p>
+//         <button onClick={()=>redirect(spot.id)}>Spot Details</button>
+//     </div>
+//     </div>
+//     ))}
+// </div>
+
     return (
 
-        <div >
-            <ul>
-             {SpotKeys.map((key)=>
-                 <li key={key}>{`${key}:${Spot[key]}`}</li>
-                 )}
-            </ul>
+        <div className="all-details">
+            <h2>{Spot.description}</h2>
+             <div className="details-card">
+                <h5>{Spot.name}</h5>
+                <p>{Spot.avgStarRating} {Spot.numReviews !== 0? "stars" : null} | {Spot.numReviews} reviews  |  {Spot.city}, {Spot.state}, {Spot.country} </p>
+                <div className="img-div">
+                <img src={Spot.previewImage}/>
+                </div>
+                <p>{Spot.address}</p>
+                <h3>Entire home hosted by: {Spot.Owner}</h3>
+                <h5>${Spot.price}/ Night</h5>
+
+
+             </div>
+
             {Spot.ownerId === user?
             <div>
                 <button onClick={handleDelete}>Delete Spot</button>
-                <button onClick={showModal}>Update Spot</button>
+                {/* <button onClick={showModal}>Update Spot</button>
 
-                {show? <EditSpotModal></EditSpotModal>: null}
+                {show? <EditSpotModal></EditSpotModal>: null} */}
+                <OpenModalButton
+                modalComponent={<EditSpotModal></EditSpotModal>}
+                buttonText="Update Spot"
+                />
                 </div>
                 :<p>To edit or delete this spot you must be logged in and be its owner.</p>}
                 {showReviews?

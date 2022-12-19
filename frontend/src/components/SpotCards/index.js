@@ -32,17 +32,35 @@ const redirect = (spotId) =>{
     }
     console.log(allSpots[0])
 
+    // return  (
+
+
+    //     <ul className="all-spots">
+    //         {allSpots[0].map( spot => (
+    //         <span key={spot.id}>
+    //             <li>{spot.previewImage}</li>
+    //             <button onClick={()=>redirect(spot.id)}>Spot Details</button>
+    //         </span>
+    //         ))}
+    //   </ul>
+
+    // );
+
     return  (
 
 
-        <ul className="all-spots">
+        <div className="all-spots">
             {allSpots[0].map( spot => (
-            <span key={spot.id}>
-                <li>{spot.previewImage}</li>
+            <div key={spot.id} className="spot-card">
+                <div key={spot.ownerId} className="card-body">
+                <img src={spot.previewImage}/>
+                <p>{spot.avgRating}, {spot.city}, {spot.state}, {spot.price}</p>
+                <p>{spot.description}</p>
                 <button onClick={()=>redirect(spot.id)}>Spot Details</button>
-            </span>
+            </div>
+            </div>
             ))}
-      </ul>
+      </div>
 
     );
 

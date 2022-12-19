@@ -51,3 +51,21 @@ price:444
 createdAt:2022-12-16T21:50:42.210Z
 updatedAt:2022-12-18T03:27:42.414Z
 SpotImage:undefined
+
+
+
+
+--------------------------------
+
+I need:
+
+
+Frontend error handling
+backend unique constraint errors. Create a same account twice.
+modals should disappear when I submit
+
+css
+
+Readme
+
+turn dateObj to date string for spot details created for how long it has been hosted

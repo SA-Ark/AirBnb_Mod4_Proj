@@ -51,7 +51,7 @@ const spotDetailsReducer = (state = initialState, action) => {
       let spot
 
         spot = action.payload
-      
+
         if(spot.Owner && typeof spot.Owner !== "string"){
 
           spot.Owner = spot.Owner?.firstName + " " + spot.Owner?.lastName
@@ -69,12 +69,12 @@ const spotDetailsReducer = (state = initialState, action) => {
         delete spot.SpotImages;
         if(spotImage){
 
-          spot.spotImage = spotImage
+          spot.previewImage = spotImage
         }else{
-          spot.spotImage = "no url was given for the image"
+          spot.previewImage = "no url was given for the image"
         }
       }else{
-        spot.spotImage = spot.spotImage.url
+        spot.previewImage = spot.spotImage.url
       }
       newState = {...spot};
 

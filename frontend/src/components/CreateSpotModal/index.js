@@ -5,6 +5,7 @@ import { createNewSpot} from "../../store/spots";
 import './CreateSpot.css';
 import { useHistory } from "react-router-dom";
 
+
 function CreateSpotModal() {
   const dispatch = useDispatch();
 
@@ -18,17 +19,33 @@ const [name, setName] = useState("");
 const [description, setDescription] = useState("");
 const [price, setPrice] = useState("");
 const [url, setUrl] = useState("");
-const ownerId = useSelector(state=> state.session.user?.id)
+const user = useSelector(state=> state.session)
+let spots = useSelector(state=> state.spots?.Spots)
+let spotId = spots.slice(spots.length-1)[0].id +1
+const ownerId = user?.id
+
+
 
 
 const history = useHistory()
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const newSpot = {address, city, state, country, name, description, price, ownerId}
-    return dispatch(createNewSpot(newSpot, url))
-    // history.push('/spots')
+    await dispatch(createNewSpot(newSpot, url));
+    setAddress("");
+    setCity("");
+    setState("");
+    setCountry("");
+    setName("");
+    setDescription("");
+    setPrice("");
+    setUrl("");
+
+
+    history.push(`/spots/${spotId}`)
+
 
   };
 

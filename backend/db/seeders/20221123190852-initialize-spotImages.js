@@ -15,7 +15,7 @@ module.exports = {
     for (let spot of allSpots){
       const spotImgObj = {};
       spotImgObj.spotId = spot.id;
-      spotImgObj.url = 'www.google.com';
+      spotImgObj.url = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRxaBwAh2xHrksOJSNhWQSCv9-vG3IDxCb1QKX28sODhqYH0fxSDd1i5kgXebXvM83i8FI&usqp=CAU';
       spotImgObj.preview = true;
       allSpotImages.push(spotImgObj)
     }
