@@ -60,10 +60,6 @@ SpotImage:undefined
 I need:
 
 
-Frontend error handling
-backend unique constraint errors. Create a same account twice.
-modals should disappear when I submit
-
 css
 
 Readme

@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import { useDispatch, useSelector} from "react-redux";
 import { editSpotDetailsBySpotId } from "../../store/editSpotModal";
-
+import { useModal } from "../../context/Modal";
 
 import "./EditSpot.css";
 
@@ -19,6 +19,8 @@ const [name, setName] = useState(Spot.name);
 const [description, setDescription] = useState(Spot.description);
 const [price, setPrice] = useState(Spot.price);
 const [previewImage, setSpotImage] = useState(Spot.previewImage)
+const [errors, setErrors] = useState([]);
+const { closeModal } = useModal();
 
 const {firstName, lastName} = user;
 const {numReviews, avgStarRating} = Spot;
@@ -31,15 +33,21 @@ console.log(Spot, "DEBUG")
 
     const newSpot = {address, city, state, country, name, description, price}
 
-    return dispatch(editSpotDetailsBySpotId(Spot.id, newSpot, previewImage, firstName, lastName, numReviews, avgStarRating ))
+     return dispatch(editSpotDetailsBySpotId(Spot.id, newSpot, previewImage, firstName, lastName, numReviews, avgStarRating )).then(closeModal)
+    .catch(async (res) => {
+      const data = await res.json();
+      data.errors = Object.values(data.errors)
+      if (data && data.errors) setErrors(data.errors)});
 
-  };
+      }
 
 return(
     <>
       <h1>Update Spot Form</h1>
       <form onSubmit={handleSubmit}>
-
+      <ul>
+          {errors.map((error, idx) => <li key={idx}>{error}</li>)}
+        </ul>
         <label>
           address
           <input
@@ -103,7 +111,7 @@ return(
          <label>
           price
           <input
-            type="text"
+            type="price"
             placeholder="Price"
             value={price}
             onChange={(e) => setPrice(e.target.value)}
@@ -113,7 +121,7 @@ return(
         <label>
           spot image url
           <input
-            type="text"
+            type="url"
             placeholder="url"
             value={previewImage}
             onChange={(e) => setSpotImage(e.target.value)}
