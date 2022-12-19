@@ -1,8 +1,8 @@
 import './ReviewForm.css' ;
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createNewReview } from '../../store/reviews';
-
+import { findSpotDetailsBySpotId } from '../../store/spotDetails';
 
 
 function ReviewForm() {
@@ -11,15 +11,23 @@ function ReviewForm() {
     const dispatch = useDispatch()
     const Spot = useSelector(state => state.spotDetails);
     const User = useSelector(state => state.session)
-    const username = User.user.username
+    const username = User.user?.username
+    const [reviewCreated, setReviewCreated] = useState(false)
 
+    console.log(Spot, "SPOT TRY GET ID")
+    useEffect( () => {
+
+         dispatch(findSpotDetailsBySpotId(Spot.id))
+    }, [reviewCreated])
 
     const {id, numReviews, avgStarRating} = Spot
-    const handleSubmit = (e)=>{
+    const handleSubmit = async (e)=>{
         e.preventDefault();
         const newReview = {review, stars}
         console.log(newReview, id)
-         dispatch(createNewReview(newReview, id, username))
+        setReviewCreated(!reviewCreated)
+        
+         await dispatch(createNewReview(newReview, id, username))
     }
     return (
         <>

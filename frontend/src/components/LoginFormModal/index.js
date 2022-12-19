@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import * as sessionActions from "../../store/session";
 import { useDispatch } from "react-redux";
 import { useModal } from "../../context/Modal";
+import { useHistory } from "react-router-dom";
 import "./LoginForm.css";
 
 function LoginFormModal() {
@@ -11,12 +12,13 @@ function LoginFormModal() {
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState([]);
   const { closeModal } = useModal();
+  const history = useHistory()
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setErrors([]);
     return dispatch(sessionActions.login({ credential, password }))
-      .then(closeModal)
+      .then(closeModal).then(history.push("/"))
       .catch(
         async (res) => {
           const data = await res.json();
@@ -24,6 +26,22 @@ function LoginFormModal() {
         }
       );
   };
+
+  const demoUserLogin = (e)=>{
+    e.preventDefault();
+    setErrors([]);
+    return dispatch(sessionActions.login({ credential: 'demo@user.io', password: "password" }))
+      .then(closeModal).then(history.push("/"))
+      .catch(
+        async (res) => {
+          const data = await res.json();
+          if (data && data.errors) setErrors(data.errors);
+        }
+      );
+  };
+
+
+
 
   return (
     <>
@@ -53,6 +71,7 @@ function LoginFormModal() {
           />
         </label>
         <button type="submit">Log In</button>
+        <button type="submit" onClick={demoUserLogin} > Demo User Log In</button>
       </form>
     </>
   );

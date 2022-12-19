@@ -20,7 +20,7 @@ router.get('/', async (req, res, next) => {
         page = 1
     }
     if (Number.isNaN(size)) {
-        size = 100
+        size = 1000
     }
     if(page < 1 || size < 1){
         const err = new Error();
